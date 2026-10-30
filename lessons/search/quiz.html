@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>확인 문제 - 순차탐색과 이진탐색</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800 p-4 sm:p-8">
+    <div class="max-w-4xl mx-auto">
+        
+        <!-- 상단 헤더 및 네비게이션 -->
+        <header class="mb-8">
+            <a href="../../index.html" class="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors font-medium mb-4">
+                <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                과목 첫 화면으로
+            </a>
+            <h1 class="text-3xl font-bold text-slate-900 mb-4">순차탐색 & 이진탐색</h1>
+            
+            <nav class="flex gap-2 mb-2 border-b border-slate-200 pb-4 overflow-x-auto">
+                <a href="explore.html" class="px-5 py-2.5 rounded-lg font-bold bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 transition-colors whitespace-nowrap">체험하기</a>
+                <a href="worksheet.html" class="px-5 py-2.5 rounded-lg font-bold bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 transition-colors whitespace-nowrap">활동지</a>
+                <a href="quiz.html" class="px-5 py-2.5 rounded-lg font-bold bg-blue-600 text-white shadow-sm whitespace-nowrap">확인 문제</a>
+            </nav>
+        </header>
+
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 sm:p-10 mb-8">
+            <h2 class="text-2xl font-black text-slate-900 mb-6 border-b pb-4">탐색 알고리즘 확인 문제</h2>
+            
+            <div id="unanswered-alert" class="hidden bg-red-50 text-red-700 p-4 rounded-lg mb-6 font-bold border border-red-200">
+                풀지 않은 문제가 있습니다. 모든 문제의 답을 선택해 주세요.
+            </div>
+
+            <form id="quiz-form" class="space-y-8">
+                <!-- Q1 -->
+                <div class="question-block" id="q1-block">
+                    <p class="font-bold text-lg text-slate-800 mb-3">
+                        <span class="text-blue-600 mr-1">Q1.</span> 
+                        크기순으로 정렬된 배열 <code class="bg-slate-100 px-1 rounded">[3, 7, 11, 18, 25, 32]</code>에서 <strong class="text-slate-900">25</strong>를 이진탐색으로 찾으려고 합니다.<br>
+                        첫 번째 단계에서 비교하게 되는 배열의 중간 인덱스와 그 값은 무엇인가요? (단, 인덱스는 0부터 시작하며, 중간 인덱스는 내림((Low+High)/2)으로 계산)
+                    </p>
+                    <div class="space-y-2 ml-7">
+                        <label class="flex items-center p-3 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50 transition-colors">
+                            <input type="radio" name="q1" value="1" class="w-4 h-4 text-blue-600 mr-3">
+                            <span>인덱스 2, 값 11</span>
+                        </label>
+                        <label class="flex items-center p-3 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50 transition-colors">
+                            <input type="radio" name="q1" value="2" class="w-4 h-4 text-blue-600 mr-3">
+                            <span>인덱스 3, 값 18</span>
+                        </label>
+                        <label class="flex items-center p-3 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50 transition-colors">
+                            <input type="radio" name="q1" value="3" class="w-4 h-4 text-blue-600 mr-3">
+                            <span>인덱스 4, 값 25</span>
+                        </label>
+                    </div>
+                    <div id="q1-feedback" class="hidden mt-3 ml-7 p-4 rounded-lg text-sm"></div>
+                </div>
+
+                <!-- Q2 -->
+                <div class="question-block" id="q2-block">
+                    <p class="font-bold text-lg text-slate-800 mb-3">
+                        <span class="text-blue-600 mr-1">Q2.</span> 
+                        위와 동일한 배열 <code class="bg-slate-100 px-1 rounded">[3, 7, 11, 18, 25, 32]</code>에서 <strong class="text-slate-900">25</strong>를 찾을 때, 목표값을 찾을 때까지 걸린 순차탐색과 이진탐색의 비교 횟수로 올바른 것은 무엇인가요?
+                    </p>
+                    <div class="space-y-2 ml-7">
+                        <label class="flex items-center p-3 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50 transition-colors">
+                            <input type="radio" name="q2" value="1" class="w-4 h-4 text-blue-600 mr-3">
+                            <span>순차탐색 4회, 이진탐색 2회</span>
+                        </label>
+                        <label class="flex items-center p-3 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50 transition-colors">
+                            <input type="radio" name="q2" value="2" class="w-4 h-4 text-blue-600 mr-3">
+                            <span>순차탐색 5회, 이진탐색 2회</span>
+                        </label>
+                        <label class="flex items-center p-3 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50 transition-colors">
+                            <input type="radio" name="q2" value="3" class="w-4 h-4 text-blue-600 mr-3">
+                            <span>순차탐색 5회, 이진탐색 3회</span>
+                        </label>
+                    </div>
+                    <div id="q2-feedback" class="hidden mt-3 ml-7 p-4 rounded-lg text-sm"></div>
+                </div>
+
+                <!-- Q3 -->
+                <div class="question-block" id="q3-block">
+                    <p class="font-bold text-lg text-slate-800 mb-3">
+                        <span class="text-blue-600 mr-1">Q3.</span> 
+                        다음 중 이진탐색에 대한 설명으로 <strong class="text-red-600">틀린</strong> 것은 무엇인가요?
+                    </p>
+                    <div class="space-y-2 ml-7">
+                        <label class="flex items-center p-3 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50 transition-colors">
+                            <input type="radio" name="q3" value="1" class="w-4 h-4 text-blue-600 mr-3">
+                            <span>탐색할 범위의 중간 위치를 계산하여 목표값과 비교한다.</span>
+                        </label>
+                        <label class="flex items-center p-3 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50 transition-colors">
+                            <input type="radio" name="q3" value="2" class="w-4 h-4 text-blue-600 mr-3">
+                            <span>배열이 정렬되어 있지 않아도 항상 정확하게 값을 찾아낼 수 있다.</span>
+                        </label>
+                        <label class="flex items-center p-3 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50 transition-colors">
+                            <input type="radio" name="q3" value="3" class="w-4 h-4 text-blue-600 mr-3">
+                            <span>일반적으로 데이터의 개수가 많을 때 순차탐색보다 더 빠르게 값을 찾는다.</span>
+                        </label>
+                    </div>
+                    <div id="q3-feedback" class="hidden mt-3 ml-7 p-4 rounded-lg text-sm"></div>
+                </div>
+                
+                <div class="pt-6 flex gap-3 border-t">
+                    <button type="button" id="submit-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-bold shadow-sm transition-colors">
+                        채점하기
+                    </button>
+                    <button type="button" id="retry-btn" class="hidden bg-slate-200 hover:bg-slate-300 text-slate-800 px-8 py-3 rounded-lg font-bold transition-colors">
+                        다시 풀기
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const answers = {
+            q1: "1", // 인덱스 2, 값 11
+            q2: "2", // 순차 5, 이진 2
+            q3: "2"  // 정렬안되어있어도 찾는다 (틀린 설명)
+        };
+
+        const explanations = {
+            q1: "이진탐색의 첫 Low는 0, High는 5입니다. 중간 인덱스는 내림((0 + 5) / 2) = 2가 됩니다. 따라서 인덱스 2의 위치에 있는 값 '11'을 가장 먼저 비교하게 됩니다.",
+            q2: "순차탐색은 3, 7, 11, 18, 25 순으로 5번째에 확인합니다. 이진탐색은 첫 번째(mid=2, 값 11), 그리고 범위가 조정된 뒤 두 번째(mid=4, 값 25)에 확인하므로 비교 횟수는 2회입니다.",
+            q3: "이진탐색은 중간값을 기준으로 왼쪽/오른쪽 탐색 범위를 결정하기 때문에, <strong>반드시 배열이 정렬되어 있어야만</strong> 올바르게 동작합니다."
+        };
+
+        const submitBtn = document.getElementById('submit-btn');
+        const retryBtn = document.getElementById('retry-btn');
+        const form = document.getElementById('quiz-form');
+        const alertBox = document.getElementById('unanswered-alert');
+
+        submitBtn.addEventListener('click', () => {
+            const q1Val = form.q1.value;
+            const q2Val = form.q2.value;
+            const q3Val = form.q3.value;
+
+            if (!q1Val || !q2Val || !q3Val) {
+                alertBox.classList.remove('hidden');
+                return;
+            }
+            alertBox.classList.add('hidden');
+
+            checkAnswer('q1', q1Val);
+            checkAnswer('q2', q2Val);
+            checkAnswer('q3', q3Val);
+
+            // 라디오 버튼 비활성화
+            const radios = form.querySelectorAll('input[type="radio"]');
+            radios.forEach(radio => radio.disabled = true);
+
+            submitBtn.classList.add('hidden');
+            retryBtn.classList.remove('hidden');
+        });
+
+        retryBtn.addEventListener('click', () => {
+            form.reset();
+            alertBox.classList.add('hidden');
+            
+            ['q1', 'q2', 'q3'].forEach(q => {
+                const fb = document.getElementById(`${q}-feedback`);
+                fb.classList.add('hidden');
+                fb.className = 'hidden mt-3 ml-7 p-4 rounded-lg text-sm';
+            });
+
+            const radios = form.querySelectorAll('input[type="radio"]');
+            radios.forEach(radio => radio.disabled = false);
+
+            submitBtn.classList.remove('hidden');
+            retryBtn.classList.add('hidden');
+        });
+
+        function checkAnswer(qName, userVal) {
+            const feedbackEl = document.getElementById(`${qName}-feedback`);
+            const isCorrect = (userVal === answers[qName]);
+            
+            feedbackEl.classList.remove('hidden');
+            if (isCorrect) {
+                feedbackEl.classList.add('bg-emerald-50', 'text-emerald-800', 'border', 'border-emerald-200');
+                feedbackEl.innerHTML = `<strong class="text-emerald-600 block mb-1">정답입니다!</strong> ${explanations[qName]}`;
+            } else {
+                feedbackEl.classList.add('bg-red-50', 'text-red-800', 'border', 'border-red-200');
+                feedbackEl.innerHTML = `<strong class="text-red-600 block mb-1">오답입니다.</strong> ${explanations[qName]}`;
+            }
+        }
+    </script>
+</body>
+</html>

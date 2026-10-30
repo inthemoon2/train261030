@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>순차탐색과 이진탐색 체험</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .array-box {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800 p-4 sm:p-8">
+    <div class="max-w-6xl mx-auto">
+        <!-- 상단 헤더 및 네비게이션 -->
+        <header class="mb-6">
+            <a href="../../index.html" class="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors font-medium mb-4">
+                <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                과목 첫 화면으로
+            </a>
+            <h1 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">순차탐색 & 이진탐색</h1>
+            
+            <!-- 페이지 이동 링크 -->
+            <nav class="flex gap-2 mb-2 border-b border-slate-200 pb-4 overflow-x-auto">
+                <a href="explore.html" class="px-5 py-2.5 rounded-lg font-bold bg-blue-600 text-white shadow-sm whitespace-nowrap">체험하기</a>
+                <a href="worksheet.html" class="px-5 py-2.5 rounded-lg font-bold bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 transition-colors whitespace-nowrap">활동지</a>
+                <a href="quiz.html" class="px-5 py-2.5 rounded-lg font-bold bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 transition-colors whitespace-nowrap">확인 문제</a>
+            </nav>
+        </header>
+
+        <p class="text-slate-600 mb-6">두 가지 탐색 알고리즘이 같은 목표값을 찾을 때 과정과 비교 횟수가 어떻게 다른지 확인해 보세요.</p>
+
+        <!-- 학습 안내 패널 (정렬의 필요성) -->
+        <div class="bg-indigo-50 rounded-2xl border border-indigo-100 p-5 mb-6 shadow-sm">
+            <h3 class="flex items-center text-indigo-800 font-bold text-lg mb-2">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                왜 이진탐색은 정렬이 필요할까요?
+            </h3>
+            <p class="text-indigo-900 text-sm leading-relaxed">
+                <strong>순차탐색</strong>은 처음부터 하나씩 확인하므로 배열이 섞여 있어도 값을 찾을 수 있습니다. 
+                하지만 <strong>이진탐색</strong>은 <code class="bg-indigo-100 px-1 py-0.5 rounded text-indigo-700">중간값</code>을 기준으로 탐색 범위를 절반씩 줄여나가기 때문에, 
+                반드시 값들이 <strong>크기순으로 정렬</strong>되어 있어야만 올바른 방향으로 범위를 좁힐 수 있습니다.
+            </p>
+        </div>
+
+        <!-- 제어 패널 -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 sm:p-6 mb-6">
+            <div class="flex flex-col lg:flex-row gap-5 items-center justify-between">
+                <div class="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto">
+                    <div class="flex items-center gap-3 w-full sm:w-auto">
+                        <label for="arrayInput" class="font-semibold text-slate-700 whitespace-nowrap">배열 :</label>
+                        <input type="text" id="arrayInput" value="3, 7, 11, 18, 25, 32" 
+                               class="border-2 border-slate-300 rounded-lg px-3 py-2 w-full sm:w-64 text-sm font-medium focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all">
+                    </div>
+                    <div class="flex items-center gap-3 w-full sm:w-auto">
+                        <label for="targetValue" class="font-semibold text-slate-700 whitespace-nowrap">찾을 값 :</label>
+                        <input type="text" id="targetValue" value="25" 
+                               class="border-2 border-slate-300 rounded-lg px-3 py-2 w-full sm:w-24 text-center font-bold focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all">
+                    </div>
+                </div>
+                <div class="flex gap-2 w-full lg:w-auto mt-2 lg:mt-0">
+                    <button onclick="nextStep()" class="flex-1 sm:flex-none bg-blue-600 hover:bg-blue-700 active:scale-95 text-white px-8 py-2.5 rounded-lg font-bold transition-all shadow-sm">
+                        다음 단계
+                    </button>
+                    <button onclick="reset()" class="flex-1 sm:flex-none bg-slate-200 hover:bg-slate-300 active:scale-95 text-slate-800 px-6 py-2.5 rounded-lg font-bold transition-all shadow-sm">
+                        초기화
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 에러 및 경고 메시지 영역 -->
+            <div id="error-message" class="text-red-600 text-sm font-bold mt-4 hidden bg-red-50 p-3 rounded-lg border border-red-100"></div>
+            <div id="warning-message" class="text-orange-700 text-sm font-bold mt-4 hidden bg-orange-50 p-3 rounded-lg border border-orange-200"></div>
+        </div>
+
+        <!-- 탐색 시각화 영역 -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- 1. 순차탐색 패널 -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col h-full">
+                <div class="flex justify-between items-end mb-6 border-b pb-4">
+                    <h2 class="text-xl font-bold text-slate-800">순차탐색 <span class="text-sm font-normal text-slate-500 ml-1">Sequential Search</span></h2>
+                    <div class="text-right">
+                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block">비교 횟수</span>
+                        <div class="text-3xl font-black text-slate-800"><span id="seq-count" class="text-blue-600">0</span></div>
+                    </div>
+                </div>
+                
+                <div id="seq-container" class="flex flex-wrap justify-center gap-3 sm:gap-4 mb-8 min-h-[100px] mt-4">
+                    <!-- 렌더링 -->
+                </div>
+                
+                <div class="mt-auto bg-slate-50 rounded-xl p-4 border border-slate-200">
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1 block">진행 상태</span>
+                    <div id="seq-status" class="font-medium text-slate-600">대기 중</div>
+                </div>
+            </div>
+
+            <!-- 2. 이진탐색 패널 -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col h-full">
+                <div class="flex justify-between items-end mb-6 border-b pb-4">
+                    <h2 class="text-xl font-bold text-slate-800">이진탐색 <span class="text-sm font-normal text-slate-500 ml-1">Binary Search</span></h2>
+                    <div class="text-right">
+                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block">비교 횟수</span>
+                        <div class="text-3xl font-black text-slate-800"><span id="bin-count" class="text-blue-600">0</span></div>
+                    </div>
+                </div>
+                
+                <div id="bin-container" class="flex flex-wrap justify-center gap-3 sm:gap-4 mb-8 min-h-[100px] mt-4">
+                    <!-- 렌더링 -->
+                </div>
+                
+                <div class="mt-auto bg-slate-50 rounded-xl p-4 border border-slate-200">
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1 block">진행 상태</span>
+                    <div id="bin-status" class="font-medium text-slate-600">대기 중</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 전역 상태 변수
+        let customArray = [3, 7, 11, 18, 25, 32];
+        let activeTarget = null;
+        let isStarted = false;
+
+        let seqPhase = 'INIT'; 
+        let seqIndex = -1;
+        let seqCount = 0;
+
+        let binPhase = 'INIT'; 
+        let binLow = 0;
+        let binHigh = 0;
+        let binMid = -1;
+        let binCount = 0;
+
+        function showError(msg) {
+            const errEl = document.getElementById('error-message');
+            errEl.textContent = msg;
+            errEl.classList.remove('hidden');
+        }
+        function hideError() {
+            document.getElementById('error-message').classList.add('hidden');
+        }
+        function showWarning(msg) {
+            const warnEl = document.getElementById('warning-message');
+            warnEl.innerHTML = msg;
+            warnEl.classList.remove('hidden');
+        }
+        function hideWarning() {
+            document.getElementById('warning-message').classList.add('hidden');
+        }
+
+        function render() {
+            renderSequential();
+            renderBinary();
+        }
+
+        function renderSequential() {
+            const container = document.getElementById('seq-container');
+            container.innerHTML = '';
+            
+            customArray.forEach((val, i) => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'flex flex-col items-center gap-1.5 relative';
+                
+                const box = document.createElement('div');
+                box.className = 'array-box w-12 h-12 sm:w-16 sm:h-16 flex items-center justify-center rounded-xl text-lg sm:text-xl font-black shadow-sm border-2';
+                
+                if (seqPhase === 'INIT') {
+                    box.classList.add('bg-white', 'border-slate-300', 'text-slate-700');
+                } else if (i < seqIndex) {
+                    box.classList.add('bg-slate-100', 'border-slate-200', 'text-slate-300'); 
+                } else if (i === seqIndex) {
+                    if (seqPhase === 'FOUND') {
+                        box.classList.add('bg-emerald-100', 'border-emerald-500', 'text-emerald-700', 'scale-110', 'shadow-md');
+                    } else if (seqPhase === 'NOT_FOUND') {
+                        box.classList.add('bg-red-100', 'border-red-500', 'text-red-700', 'scale-110', 'shadow-md');
+                    } else {
+                        box.classList.add('bg-blue-100', 'border-blue-500', 'text-blue-700', 'scale-110', 'shadow-md', 'ring-4', 'ring-blue-100');
+                    }
+                } else {
+                    box.classList.add('bg-white', 'border-slate-300', 'text-slate-700');
+                }
+                
+                box.textContent = val;
+                
+                const indexLabel = document.createElement('div');
+                indexLabel.className = 'text-xs font-semibold text-slate-400';
+                indexLabel.textContent = `[${i}]`;
+                
+                wrapper.appendChild(box);
+                wrapper.appendChild(indexLabel);
+                container.appendChild(wrapper);
+            });
+
+            document.getElementById('seq-count').textContent = seqCount;
+            const statusEl = document.getElementById('seq-status');
+            
+            if (seqPhase === 'INIT') {
+                statusEl.textContent = '대기 중 (값을 입력하고 다음 단계를 누르세요)';
+                statusEl.className = 'text-slate-500 font-medium';
+            } else if (seqPhase === 'SEARCHING') {
+                statusEl.innerHTML = `<span class="text-blue-600 font-bold">비교 중</span> : 인덱스 [${seqIndex}]의 값(<span class="font-bold">${customArray[seqIndex]}</span>) 확인`;
+                statusEl.className = 'text-slate-700';
+            } else if (seqPhase === 'FOUND') {
+                statusEl.innerHTML = `<span class="text-emerald-600 font-bold">탐색 성공!</span> 인덱스 [${seqIndex}]에서 찾음`;
+                statusEl.className = 'text-emerald-700';
+            } else if (seqPhase === 'NOT_FOUND') {
+                statusEl.innerHTML = `<span class="text-red-600 font-bold">탐색 실패</span> : 배열 끝까지 일치하는 값이 없음`;
+                statusEl.className = 'text-red-700';
+            }
+        }
+
+        function renderBinary() {
+            const container = document.getElementById('bin-container');
+            container.innerHTML = '';
+            
+            customArray.forEach((val, i) => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'flex flex-col items-center gap-1.5 relative pt-6';
+                
+                const box = document.createElement('div');
+                box.className = 'array-box w-12 h-12 sm:w-16 sm:h-16 flex items-center justify-center rounded-xl text-lg sm:text-xl font-black shadow-sm border-2';
+                
+                let inRange = (i >= binLow && i <= binHigh);
+                
+                if (binPhase === 'INIT') {
+                    box.classList.add('bg-white', 'border-slate-300', 'text-slate-700');
+                } else {
+                    if (i === binMid) {
+                        if (binPhase === 'FOUND') {
+                            box.classList.add('bg-emerald-100', 'border-emerald-500', 'text-emerald-700', 'scale-110', 'shadow-md', 'z-10');
+                        } else if (binPhase === 'NOT_FOUND') {
+                            box.classList.add('bg-red-100', 'border-red-500', 'text-red-700', 'scale-110', 'shadow-md', 'z-10');
+                        } else {
+                            box.classList.add('bg-blue-100', 'border-blue-500', 'text-blue-700', 'scale-110', 'shadow-md', 'ring-4', 'ring-blue-100', 'z-10');
+                        }
+                    } else if (inRange) {
+                        box.classList.add('bg-white', 'border-slate-400', 'text-slate-700');
+                    } else {
+                        box.classList.add('bg-slate-100', 'border-slate-200', 'text-slate-300', 'opacity-50');
+                    }
+                }
+                
+                box.textContent = val;
+                wrapper.appendChild(box);
+                
+                const indexLabel = document.createElement('div');
+                indexLabel.className = 'text-xs font-semibold text-slate-400';
+                indexLabel.textContent = `[${i}]`;
+                wrapper.appendChild(indexLabel);
+
+                if (binPhase !== 'INIT') {
+                    const badgeContainer = document.createElement('div');
+                    badgeContainer.className = 'absolute top-0 left-1/2 transform -translate-x-1/2 flex flex-col gap-0.5 items-center z-20';
+                    
+                    if (i === binMid) {
+                        const bMid = document.createElement('span');
+                        bMid.className = 'text-[10px] font-bold px-1.5 py-0.5 rounded bg-blue-500 text-white leading-none shadow-sm';
+                        bMid.textContent = 'Mid';
+                        badgeContainer.appendChild(bMid);
+                    }
+                    if (i === binLow && binPhase === 'SEARCHING') {
+                        const bLow = document.createElement('span');
+                        bLow.className = 'text-[10px] font-bold px-1.5 py-0.5 rounded bg-orange-500 text-white leading-none shadow-sm';
+                        bLow.textContent = 'Low';
+                        badgeContainer.appendChild(bLow);
+                    }
+                    if (i === binHigh && binPhase === 'SEARCHING') {
+                        const bHigh = document.createElement('span');
+                        bHigh.className = 'text-[10px] font-bold px-1.5 py-0.5 rounded bg-purple-500 text-white leading-none shadow-sm';
+                        bHigh.textContent = 'High';
+                        badgeContainer.appendChild(bHigh);
+                    }
+                    
+                    if (badgeContainer.children.length > 0) {
+                        wrapper.appendChild(badgeContainer);
+                    }
+                }
+
+                container.appendChild(wrapper);
+            });
+
+            document.getElementById('bin-count').textContent = binCount;
+            const statusEl = document.getElementById('bin-status');
+            
+            if (binPhase === 'INIT') {
+                statusEl.textContent = '대기 중 (값을 입력하고 다음 단계를 누르세요)';
+                statusEl.className = 'text-slate-500 font-medium';
+            } else if (binPhase === 'SEARCHING') {
+                statusEl.innerHTML = `<span class="text-blue-600 font-bold">비교 중</span> : 범위 [${binLow}~${binHigh}]의 중간 인덱스 [${binMid}]의 값(<span class="font-bold">${customArray[binMid]}</span>) 확인`;
+                statusEl.className = 'text-slate-700';
+            } else if (binPhase === 'FOUND') {
+                statusEl.innerHTML = `<span class="text-emerald-600 font-bold">탐색 성공!</span> 인덱스 [${binMid}]에서 찾음`;
+                statusEl.className = 'text-emerald-700';
+            } else if (binPhase === 'NOT_FOUND') {
+                statusEl.innerHTML = `<span class="text-red-600 font-bold">탐색 실패</span> : 범위를 좁혔으나 값이 없음`;
+                statusEl.className = 'text-red-700';
+            }
+        }
+
+        function nextStep() {
+            let seqDone = (seqPhase === 'FOUND' || seqPhase === 'NOT_FOUND');
+            let binDone = (binPhase === 'FOUND' || binPhase === 'NOT_FOUND');
+
+            if (isStarted && seqDone && binDone) {
+                showError("두 탐색이 모두 완료되었습니다. 다시 진행하려면 '초기화' 버튼을 눌러주세요.");
+                return;
+            }
+
+            if (!isStarted) {
+                const arrStr = document.getElementById('arrayInput').value;
+                const parsedArr = arrStr.split(',').map(s => s.trim()).filter(s => s !== '');
+                if (parsedArr.length === 0 || parsedArr.some(isNaN)) {
+                    showError("배열에는 숫자만 쉼표(,)로 구분하여 입력해주세요. (예: 3, 7, 11)");
+                    return;
+                }
+                customArray = parsedArr.map(Number);
+                
+                const targetStr = document.getElementById('targetValue').value.trim();
+                if (!/^-?\d+$/.test(targetStr)) {
+                    showError("찾을 값은 올바른 정수여야 합니다.");
+                    return;
+                }
+                activeTarget = parseInt(targetStr, 10);
+                
+                let isSorted = true;
+                for (let i = 0; i < customArray.length - 1; i++) {
+                    if (customArray[i] > customArray[i+1]) {
+                        isSorted = false;
+                        break;
+                    }
+                }
+                if (!isSorted) {
+                    showWarning(`<strong>[안내] 입력한 배열이 정렬되어 있지 않습니다.</strong><br>이진탐색은 정렬된 상태에서만 정상 작동하므로 결과가 정확하지 않을 수 있습니다.`);
+                } else {
+                    hideWarning();
+                }
+                
+                document.getElementById('arrayInput').disabled = true;
+                document.getElementById('targetValue').disabled = true;
+                document.getElementById('arrayInput').classList.add('bg-slate-100', 'text-slate-400');
+                document.getElementById('targetValue').classList.add('bg-slate-100', 'text-slate-400');
+                
+                isStarted = true;
+                
+                seqPhase = 'SEARCHING';
+                seqIndex = 0;
+                
+                binPhase = 'SEARCHING';
+                binLow = 0;
+                binHigh = customArray.length - 1;
+                
+            } else {
+                if (seqPhase === 'SEARCHING') {
+                    seqIndex++;
+                }
+            }
+
+            if (seqPhase === 'SEARCHING') {
+                if (seqIndex < customArray.length) {
+                    seqCount++;
+                    if (customArray[seqIndex] === activeTarget) {
+                        seqPhase = 'FOUND';
+                    } else if (seqIndex === customArray.length - 1) {
+                        seqPhase = 'NOT_FOUND';
+                    }
+                } else {
+                    seqPhase = 'NOT_FOUND';
+                }
+            }
+
+            if (binPhase === 'SEARCHING') {
+                binMid = Math.floor((binLow + binHigh) / 2);
+                binCount++; 
+                
+                if (customArray[binMid] === activeTarget) {
+                    binPhase = 'FOUND';
+                } else {
+                    if (activeTarget < customArray[binMid]) {
+                        binHigh = binMid - 1;
+                    } else {
+                        binLow = binMid + 1;
+                    }
+                    if (binLow > binHigh) {
+                        binPhase = 'NOT_FOUND';
+                    }
+                }
+            }
+
+            hideError();
+            render();
+        }
+
+        function reset() {
+            isStarted = false;
+            seqPhase = 'INIT';
+            seqIndex = -1;
+            seqCount = 0;
+            binPhase = 'INIT';
+            binLow = 0;
+            binHigh = 0;
+            binMid = -1;
+            binCount = 0;
+            activeTarget = null;
+            
+            const arrInput = document.getElementById('arrayInput');
+            const targetInput = document.getElementById('targetValue');
+            
+            arrInput.disabled = false;
+            targetInput.disabled = false;
+            arrInput.classList.remove('bg-slate-100', 'text-slate-400');
+            targetInput.classList.remove('bg-slate-100', 'text-slate-400');
+            
+            hideError();
+            hideWarning();
+            render();
+        }
+
+        window.onload = () => {
+            render();
+        };
+    </script>
+</body>
+</html>

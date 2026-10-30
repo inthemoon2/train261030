@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>고등학교 정보 수업 자료</title>
+    <!-- Tailwind CSS 로드 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800 p-4 sm:p-8">
+    <div class="max-w-5xl mx-auto">
+        <!-- 상단 헤더 -->
+        <header class="mb-10 text-center sm:text-left border-b border-slate-200 pb-8 mt-4">
+            <h1 class="text-4xl sm:text-5xl font-black text-slate-900 mb-3 tracking-tight">고등학교 정보</h1>
+            <p class="text-slate-600 font-medium text-lg">알고리즘 및 프로그래밍 인터랙티브 수업 자료</p>
+        </header>
+
+        <main class="space-y-12">
+            <!-- 단원 1. 데이터 탐색 -->
+            <section>
+                <div class="flex items-center gap-3 mb-5">
+                    <div class="bg-blue-600 text-white w-9 h-9 rounded-xl flex items-center justify-center text-lg font-bold shadow-sm">1</div>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-slate-800">데이터 탐색 (순차탐색과 이진탐색)</h2>
+                </div>
+                
+                <!-- 자료 링크 카드 그리드 -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:ml-12">
+                    
+                    <!-- 카드 1: 체험하기 -->
+                    <a href="lessons/search/explore.html" class="group bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-blue-400 hover:ring-2 hover:ring-blue-100 transition-all flex flex-col h-full">
+                        <div class="mb-4">
+                            <span class="bg-blue-100 text-blue-700 text-xs font-bold px-2 py-1 rounded-md mb-3 inline-block">Interactive</span>
+                            <h3 class="font-bold text-xl text-slate-900 group-hover:text-blue-700 mb-2 flex items-center justify-between transition-colors">
+                                체험하기
+                                <svg class="w-5 h-5 text-slate-400 group-hover:text-blue-600 transform group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </h3>
+                        </div>
+                        <p class="text-slate-600 text-sm leading-relaxed mt-auto">
+                            두 가지 탐색 알고리즘이 목표값을 찾는 과정을 시각적으로 비교하고 횟수의 차이를 실시간으로 체험합니다.
+                        </p>
+                    </a>
+
+                    <!-- 카드 2: 활동지 -->
+                    <a href="lessons/search/worksheet.html" class="group bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-emerald-400 hover:ring-2 hover:ring-emerald-100 transition-all flex flex-col h-full">
+                        <div class="mb-4">
+                            <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-1 rounded-md mb-3 inline-block">Printable</span>
+                            <h3 class="font-bold text-xl text-slate-900 group-hover:text-emerald-700 mb-2 flex items-center justify-between transition-colors">
+                                활동지
+                                <svg class="w-5 h-5 text-slate-400 group-hover:text-emerald-600 transform group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </h3>
+                        </div>
+                        <p class="text-slate-600 text-sm leading-relaxed mt-auto">
+                            알고리즘의 동작 횟수를 미리 예상해 보고, 실제 체험 결과와 비교 분석 내용을 기록하는 인쇄용 학습지입니다.
+                        </p>
+                    </a>
+
+                    <!-- 카드 3: 확인 문제 -->
+                    <a href="lessons/search/quiz.html" class="group bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-purple-400 hover:ring-2 hover:ring-purple-100 transition-all flex flex-col h-full">
+                        <div class="mb-4">
+                            <span class="bg-purple-100 text-purple-700 text-xs font-bold px-2 py-1 rounded-md mb-3 inline-block">Quiz</span>
+                            <h3 class="font-bold text-xl text-slate-900 group-hover:text-purple-700 mb-2 flex items-center justify-between transition-colors">
+                                확인 문제
+                                <svg class="w-5 h-5 text-slate-400 group-hover:text-purple-600 transform group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </h3>
+                        </div>
+                        <p class="text-slate-600 text-sm leading-relaxed mt-auto">
+                            중간 인덱스 계산, 비교 횟수, 정렬의 필요성 등 학습한 알고리즘의 핵심 개념을 문제를 풀며 점검합니다.
+                        </p>
+                    </a>
+                </div>
+            </section>
+
+            <!-- 단원 2. 데이터 정렬 (추가 예정 템플릿) -->
+            <section class="opacity-60 grayscale pointer-events-none mt-12">
+                <div class="flex items-center gap-3 mb-5">
+                    <div class="bg-slate-400 text-white w-9 h-9 rounded-xl flex items-center justify-center text-lg font-bold shadow-sm">2</div>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-slate-700">데이터 정렬 (선택정렬과 버블정렬) <span class="text-base font-normal text-slate-500 ml-2">추가 예정</span></h2>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:ml-12">
+                    <div class="bg-white border border-slate-200 rounded-2xl p-6 h-32 flex items-center justify-center text-slate-400 font-medium bg-slate-100/50">
+                        자료 준비 중
+                    </div>
+                </div>
+            </section>
+            
+        </main>
+        
+        <footer class="mt-20 border-t border-slate-200 pt-8 text-center text-slate-500 text-sm">
+            <p>© 고등학교 정보 수업 자료. 브라우저에서 바로 실행 가능한 교육용 파일입니다.</p>
+        </footer>
+    </div>
+</body>
+</html>
